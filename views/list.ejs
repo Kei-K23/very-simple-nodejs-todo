@@ -1,0 +1,50 @@
+<%- include('partials/header.ejs') %> <% if (tasks) { %>
+
+<h2 class="text-center mt-3">All tasks</h2>
+
+<table
+  class="table table-striped mt-3 container-md border border-2 border-secondary"
+>
+  <thead>
+    <tr>
+      <% ["No.", 'Task', 'Complete', 'CreateAt', 'Action'].forEach(key => { %>
+      <th scope="col"><%= key %></th>
+      <% }) %>
+    </tr>
+  </thead>
+  <tbody>
+    <% tasks.map((task, index) => { %>
+    <tr>
+      <th scope="row"><%= index + 1 %></th>
+      <% if (task.complete) { %>
+      <td class="text-decoration-line-through"><%= task.todo %></td>
+      <% } %> <% if (!task.complete) { %>
+      <td class="text-decoration-none"><%= task.todo %></td>
+      <% } %>
+      <td><%= task.complete %></td>
+      <td>
+        <%- new Date(task.createdAt).getDate() %>/<%- new
+        Date(task.createdAt).getMonth() %>/<%- new
+        Date(task.createdAt).getFullYear() %>
+      </td>
+      <td>
+        <div class="d-flex gap-4">
+          <form action="/complete" method="post">
+            <input type="hidden" name="id" value="<%= task.id %>" />
+            <button class="btn btn-primary">
+              <% if (task.complete) { %> Undone <% } %> <% if (!task.complete) {
+              %> Done <% } %>
+            </button>
+          </form>
+          <form action="/delete" method="post">
+            <input type="hidden" name="id" value="<%= task.id %>" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<% } %>
